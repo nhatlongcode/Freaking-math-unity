@@ -18,21 +18,31 @@ public class GameController : MonoBehaviour {
     public GameObject Flying;
     public int speed;
 
+    private int flag;
     private int rightNumber;
     private int leftNumber;
     private int mathOperator;
     private int trueResult;
     private int FalseResult;
     private int currentScore;
-    private int bestScore;
+    private int highScore;
 
     [SerializeField]
     private float limitTime;
+        
+    [SerializeField]
+    private AudioSource audio;
+
+    [SerializeField]
+    private AudioClip trueClip, falseClip;
 
     private float currentTime;
 
     public void Start()
     {
+        //PlayerPrefs.SetInt("highscore", 0);
+        //PlayerPrefs.Save();
+        flag = 0;
         trueButton.SetActive(true);
         falseButton.SetActive(true);
         timeProgress.SetActive(true);
@@ -48,6 +58,12 @@ public class GameController : MonoBehaviour {
         currentTime += Time.deltaTime;
         if (currentTime > limitTime)
         {
+            if (flag == 0)
+            {
+                audio.PlayOneShot(falseClip);
+                flag++;
+            }
+            
             Loss();
         }
         else
@@ -95,18 +111,21 @@ public class GameController : MonoBehaviour {
                 
         }
         scoreText.GetComponent<Text>().text = currentScore.ToString();
-    }
+    } //random ra phep toan
 
     public void onTrueButtonClick()
     {
         if (trueResult == FalseResult) // thang
         {
+            audio.PlayOneShot(trueClip);
             currentScore += 1;
-            Move();
+            //Move();
             createMath();
         }
         else // thua
         {
+            audio.PlayOneShot(falseClip);
+            flag++;
             Loss();
         }
     }
@@ -115,38 +134,49 @@ public class GameController : MonoBehaviour {
     {
         if(trueResult != FalseResult)
         {
+            audio.PlayOneShot(trueClip);
             currentScore += 1;
-            Move();
+            //Move();
             createMath();
 
         }
         else //thua
         {
+            audio.PlayOneShot(falseClip);
+            flag++;
             Loss();
         }
     }
 
     public void restartButtonOnClick()
     {
+        //flag = 0;
         Start();
-    }
+    } //choi lai
 
     public void mainMenuButtonOnClick()
     {
         SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
         //Application.LoadLevel(1);
-    }
+    } // chuyen ve menu
 
-    private void checkBest()
+    private void checkBest()  
     {
-        if (currentScore > bestScore)
-            bestScore = currentScore;
-    } // kiem tra best
+        highScore = PlayerPrefs.GetInt("highscore");
+        if (currentScore > highScore)
+        {
+            //highScore = currentScore;
+            PlayerPrefs.SetInt("highscore", currentScore);
+            PlayerPrefs.Save();
+        }
+    }  // kiem tra best da luu trong bo nho
 
     private void Loss()
     {
+        //audio.PlayOneShot(falseClip);
         checkBest();
-        BestScoreText.GetComponent<Text>().text = bestScore.ToString();
+        highScore = PlayerPrefs.GetInt("highscore");
+        BestScoreText.GetComponent<Text>().text = highScore.ToString();
         finalScore.GetComponent<Text>().text = currentScore.ToString();
         trueButton.SetActive(false);
         falseButton.SetActive(false);
@@ -160,6 +190,6 @@ public class GameController : MonoBehaviour {
         Vector3 temp = Flying.transform.position;
         temp.x -= speed * Time.deltaTime;
         Flying.transform.position = temp;
-    }
+    } // animation khi chuyen bai toan (dang fix)
 }
 
