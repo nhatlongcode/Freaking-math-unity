@@ -6,10 +6,13 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour {
 
-    public Text mathText;
-    public Text resultText;
+    public Text mathText_1;
+    public Text resultText_1;
+    public Text mathText_2;
+    public Text resultText_2;
     public Text scoreText;
     public Text finalScore;
+
     public GameObject gameOverPanel;
     public Text BestScoreText;
     public GameObject timeProgress;
@@ -17,7 +20,11 @@ public class GameController : MonoBehaviour {
     public GameObject falseButton;
     public GameObject Flying;
     public int speed;
+    public GameObject math_1;
+    public GameObject math_2;
 
+    private bool check;
+    private bool click;
     private int flag;
     private int rightNumber;
     private int leftNumber;
@@ -38,10 +45,14 @@ public class GameController : MonoBehaviour {
 
     private float currentTime;
 
+
+
     public void Start()
     {
         //PlayerPrefs.SetInt("highscore", 0);
         //PlayerPrefs.Save();
+        check = false;
+        click = true;
         flag = 0;
         trueButton.SetActive(true);
         falseButton.SetActive(true);
@@ -50,7 +61,11 @@ public class GameController : MonoBehaviour {
         currentTime = 0;    
         currentScore = 0;
         gameOverPanel.SetActive(false);
-        createMath();
+        if (currentScore == 0 || currentScore % 2 == 0)
+        {
+            createMath(mathText_1, resultText_1);
+        }
+        else createMath(mathText_2, resultText_2);
     }
 
     public void Update()
@@ -73,7 +88,7 @@ public class GameController : MonoBehaviour {
         }
     }
 
-    public void createMath()
+    public void createMath(Text mathText, Text resultText)
     {
         currentTime = 0;
         leftNumber = Random.Range(0, 10);
@@ -117,10 +132,16 @@ public class GameController : MonoBehaviour {
     {
         if (trueResult == FalseResult) // thang
         {
+            check = true;
+            Invoke("delay", 0.2f);
             audio.PlayOneShot(trueClip);
             currentScore += 1;
             //Move();
-            createMath();
+            if (currentScore == 0 || currentScore % 2 == 0)
+            {
+                createMath(mathText_1, resultText_1);
+            }
+            else createMath(mathText_2, resultText_2);
         }
         else // thua
         {
@@ -134,10 +155,16 @@ public class GameController : MonoBehaviour {
     {
         if(trueResult != FalseResult)
         {
+            check = true;
+            Invoke("delay", 0.2f);
             audio.PlayOneShot(trueClip);
             currentScore += 1;
             //Move();
-            createMath();
+            if (currentScore == 0 || currentScore % 2 == 0)
+            {
+                createMath(mathText_1, resultText_1);
+            }
+            else createMath(mathText_2, resultText_2);
 
         }
         else //thua
@@ -191,5 +218,41 @@ public class GameController : MonoBehaviour {
         temp.x -= speed * Time.deltaTime;
         Flying.transform.position = temp;
     } // animation khi chuyen bai toan (dang fix)
+
+    void delay()
+    {
+        check = false;
+        click = true;
+    }
+
+    void FixedUpdate() // 0.02s
+    {
+
+        //time.GetComponent<Text>().text = v.ToString();
+        if ((check == true))
+        {
+            click = false;
+            math_1.transform.localPosition += new Vector3(-50, 0.0f);
+            math_2.transform.localPosition += new Vector3(-50, 0f);
+
+        }
+
+        if ((math_1.transform.localPosition.x == -500))
+        {
+            click = false;
+            math_1.SetActive(false);
+            math_1.transform.localPosition = new Vector3(500, 0f);
+            if (math_1.transform.localPosition.x == 500) math_1.SetActive(true);
+        }
+
+        if (math_2.transform.localPosition.x == -500)
+        {
+            click = false;
+            math_2.SetActive(false);
+            math_2.transform.localPosition = new Vector3(500, 0f);
+            if (math_2.transform.localPosition.x == 500) math_2.SetActive(true);
+        }
+
+    }
 }
 
