@@ -30,7 +30,7 @@ public class GameController : MonoBehaviour {
     private int leftNumber;
     private int mathOperator;
     private int trueResult;
-    private int FalseResult;
+    private int falseResult;
     private int currentScore;
     private int highScore;
 
@@ -98,9 +98,9 @@ public class GameController : MonoBehaviour {
         {
             case 0: // dau cong 
                 trueResult = leftNumber + rightNumber;
-                FalseResult = trueResult + Random.Range(-1, 1);
+                falseResult = trueResult + Random.Range(-1, 1);
                 mathText.GetComponent<Text>().text = leftNumber.ToString() + " + " + rightNumber.ToString();
-                resultText.GetComponent<Text>().text = "=" + FalseResult.ToString();
+                resultText.GetComponent<Text>().text = "=" + falseResult.ToString();
             
                 break;
 
@@ -108,20 +108,20 @@ public class GameController : MonoBehaviour {
                 if (leftNumber >= rightNumber)
                 {
                     trueResult = leftNumber - rightNumber;
-                    FalseResult = trueResult + Random.Range(-2, 2);
+                    falseResult = trueResult + Random.Range(-2, 2);
                     mathText.GetComponent<Text>().text = leftNumber.ToString() + " - " + rightNumber.ToString();
-                    resultText.GetComponent<Text>().text = "=" + FalseResult.ToString();
+                    resultText.GetComponent<Text>().text = "=" + falseResult.ToString();
 
                 }
                 else
                 {
                     trueResult = rightNumber - leftNumber;
-                    FalseResult = trueResult + Random.Range(-2, 2);
+                    falseResult = trueResult + Random.Range(-2, 2);
                     mathText.GetComponent<Text>().text = rightNumber.ToString() + " - " + leftNumber.ToString();
-                    resultText.GetComponent<Text>().text = "=" + FalseResult.ToString();
+                    resultText.GetComponent<Text>().text = "=" + falseResult.ToString();
 
                 }
-                //FalseResult = trueResult + Random.Range(-2, 2);
+                //falseResult = trueResult + Random.Range(-2, 2);
                 break;  
                 
         }
@@ -130,7 +130,8 @@ public class GameController : MonoBehaviour {
 
     public void onTrueButtonClick()
     {
-        if (trueResult == FalseResult) // thang
+        trueButton.GetComponent<ParticleSystem>().Play();
+        if (trueResult == falseResult) // thang
         {
             check = true;
             Invoke("delay", 0.2f);
@@ -153,7 +154,8 @@ public class GameController : MonoBehaviour {
 
     public void onFalseButtonClick() //thang
     {
-        if(trueResult != FalseResult)
+        falseButton.GetComponent<ParticleSystem>().Play();
+        if(trueResult != falseResult)
         {
             check = true;
             Invoke("delay", 0.2f);
@@ -175,13 +177,13 @@ public class GameController : MonoBehaviour {
         }
     }
 
-    public void restartButtonOnClick()
+    public void RestartButtonOnClick()
     {
         //flag = 0;
         Start();
     } //choi lai
 
-    public void mainMenuButtonOnClick()
+    public void MainMenuButtonOnClick()
     {
         SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
         //Application.LoadLevel(1);
