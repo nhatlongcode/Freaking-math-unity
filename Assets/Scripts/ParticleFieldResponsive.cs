@@ -8,10 +8,6 @@ using UnityEngine.SceneManagement;
     {
         public MeshFilter meshFilter;
 
-        private void Awake()
-        {
-            SceneManager.sceneLoaded += OnSceneStart;
-        }
 
         private IEnumerator Start()
         {
@@ -29,16 +25,15 @@ using UnityEngine.SceneManagement;
             float widthScaleFactor = (width / mesh.bounds.size.x);
             float heightScaleFactor = (height / mesh.bounds.size.y);
 
-            // Debug.Log(widthScaleFactor + ":" + heightScaleFactor);
 
-            Vector3 scale = transform.localScale;
+            Vector3 scale = transform.localScale; //scale man hinh
             scale.x *= widthScaleFactor;
             scale.y *= heightScaleFactor;
 
-            ParticleSystem ps = GetComponent<ParticleSystem>();
+            ParticleSystem ps = this.GetComponent<ParticleSystem>();
             var sh = ps.shape;
             sh.scale = scale;
-
+            
             ps.Play();
         }
 
@@ -65,10 +60,5 @@ using UnityEngine.SceneManagement;
             ParticleSystem ps = GetComponent<ParticleSystem>();
             var sh = ps.shape;
             sh.scale = scale;
-        }
-
-        private void OnSceneStart(Scene scene, LoadSceneMode mode)
-        {
-            // ResponsiveScale();
         }
     }
