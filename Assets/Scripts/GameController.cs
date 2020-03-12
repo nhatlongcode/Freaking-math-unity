@@ -23,6 +23,9 @@ public class GameController : MonoBehaviour {
     public GameObject math_1;
     public GameObject math_2;
 
+    public GameObject trueParticle;
+    public GameObject falseParticle;
+
     private bool check;
     private bool click;
     private int flag;
@@ -63,9 +66,9 @@ public class GameController : MonoBehaviour {
         gameOverPanel.SetActive(false);
         if (currentScore == 0 || currentScore % 2 == 0)
         {
-            createMath(mathText_1, resultText_1);
+            CreateMath(mathText_1, resultText_1);
         }
-        else createMath(mathText_2, resultText_2);
+        else CreateMath(mathText_2, resultText_2);
     }
 
     public void Update()
@@ -88,7 +91,7 @@ public class GameController : MonoBehaviour {
         }
     }
 
-    public void createMath(Text mathText, Text resultText)
+    public void CreateMath(Text mathText, Text resultText)
     {
         currentTime = 0;
         leftNumber = Random.Range(0, 10);
@@ -128,9 +131,9 @@ public class GameController : MonoBehaviour {
         scoreText.GetComponent<Text>().text = currentScore.ToString();
     } //random ra phep toan
 
-    public void onTrueButtonClick()
+    public void OnTrueButtonClick()
     {
-        trueButton.GetComponent<ParticleSystem>().Play();
+        trueParticle.GetComponent<ParticleSystem>().Play();
         if (trueResult == falseResult) // thang
         {
             check = true;
@@ -140,9 +143,9 @@ public class GameController : MonoBehaviour {
             //Move();
             if (currentScore == 0 || currentScore % 2 == 0)
             {
-                createMath(mathText_1, resultText_1);
+                CreateMath(mathText_1, resultText_1);
             }
-            else createMath(mathText_2, resultText_2);
+            else CreateMath(mathText_2, resultText_2);
         }
         else // thua
         {
@@ -152,9 +155,9 @@ public class GameController : MonoBehaviour {
         }
     }
 
-    public void onFalseButtonClick() //thang
+    public void OnFalseButtonClick() //thang
     {
-        falseButton.GetComponent<ParticleSystem>().Play();
+        falseParticle.GetComponent<ParticleSystem>().Play();
         if(trueResult != falseResult)
         {
             check = true;
@@ -164,9 +167,9 @@ public class GameController : MonoBehaviour {
             //Move();
             if (currentScore == 0 || currentScore % 2 == 0)
             {
-                createMath(mathText_1, resultText_1);
+                CreateMath(mathText_1, resultText_1);
             }
-            else createMath(mathText_2, resultText_2);
+            else CreateMath(mathText_2, resultText_2);
 
         }
         else //thua
@@ -189,7 +192,7 @@ public class GameController : MonoBehaviour {
         //Application.LoadLevel(1);
     } // chuyen ve menu
 
-    private void checkBest()  
+    private void CheckBest()  
     {
         highScore = PlayerPrefs.GetInt("highscore");
         if (currentScore > highScore)
@@ -203,7 +206,7 @@ public class GameController : MonoBehaviour {
     private void Loss()
     {
         //audio.PlayOneShot(falseClip);
-        checkBest();
+        CheckBest();
         highScore = PlayerPrefs.GetInt("highscore");
         BestScoreText.GetComponent<Text>().text = highScore.ToString();
         finalScore.GetComponent<Text>().text = currentScore.ToString();
@@ -221,7 +224,7 @@ public class GameController : MonoBehaviour {
         Flying.transform.position = temp;
     } // animation khi chuyen bai toan (dang fix)
 
-    void delay()
+    void Delay()
     {
         check = false;
         click = true;
